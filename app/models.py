@@ -1,5 +1,7 @@
 from datetime import datetime
+
 from app import db
+
 
 # 会员模型
 class User(db.Model):
@@ -169,6 +171,3 @@ class Oplog(db.Model):
     def __repr__(self):
         return '<Oplog %r>' % self.id
 
-
-if __name__ == '__main__':
-    pass
