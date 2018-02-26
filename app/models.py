@@ -6,6 +6,7 @@ from app import db
 # 会员模型
 class User(db.Model):
     __tablename__ = 'user'
+    __table_args__ = {"useexisting": True}
     id = db.Column(db.Integer, primary_key=True)  # 编号
     name = db.Column(db.String(100), unique=True)  # 昵称
     pwd = db.Column(db.String(100))  # 密码
@@ -146,6 +147,9 @@ class Admin(db.Model):
     def __repr__(self):
         return '<Admin %r>' % self.name
 
+    def check_pwd(self, pwd):
+        from werkzeug.security import check_password_hash
+        return check_password_hash(self.pwd, pwd)
 
 # 管理员登录日志
 class Adminlog(db.Model):
@@ -171,3 +175,11 @@ class Oplog(db.Model):
     def __repr__(self):
         return '<Oplog %r>' % self.id
 
+
+if __name__ == '__main__':
+    from werkzeug.security import generate_password_hash
+
+    # role = Role(name='超级管理员', auths='')
+    admin = Admin(name='toffee', pwd=generate_password_hash('123456'), is_super=0)
+    db.session.add(admin)
+    db.session.commit()
