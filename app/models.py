@@ -127,6 +127,7 @@ class Role(db.Model):
     name = db.Column(db.String(100), unique=True)  # 名称
     auths = db.Column(db.String(100))
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)  # 添加时间
+    admins = db.relationship("Admin", backref='role')  # 管理员外键关系关联
 
     def __repr__(self):
         return '<Role %r>' % self.name
@@ -175,11 +176,22 @@ class Oplog(db.Model):
     def __repr__(self):
         return '<Oplog %r>' % self.id
 
-
-if __name__ == '__main__':
-    from werkzeug.security import generate_password_hash
-
-    # role = Role(name='超级管理员', auths='')
-    admin = Admin(name='toffee', pwd=generate_password_hash('123456'), is_super=0)
-    db.session.add(admin)
-    db.session.commit()
+# if __name__ == '__main__':
+#     db.create_all()
+#     role = Role(
+#         name="超级管理员",
+#         auths="1"
+#     )
+#     db.session.add(role)
+#     db.session.commit()
+#     # 哈希加密密码
+#     from werkzeug.security import generate_password_hash
+#
+#     admin = Admin(
+#         name="toffee",
+#         pwd=generate_password_hash("123456"),
+#         is_super=0,
+#         role_id=1
+#     )
+#     db.session.add(admin)
+#     db.session.commit()
